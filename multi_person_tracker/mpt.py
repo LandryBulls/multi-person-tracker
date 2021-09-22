@@ -172,104 +172,104 @@ class MPT():
 
         return people
 
-    def display_results(self, image_folder, trackers, output_file=None):
-        '''
-        Display the output of multi-person-tracking
-        :param video (ndarray): input video tensor of shape NxHxWxC
-        :param trackers (ndarray): tracklets of shape Nx5 [x1,y1,x2,y2,track_id]
-        :return: None
-        '''
-        print('Displaying results..')
+    # def display_results(self, image_folder, trackers, output_file=None):
+    #     '''
+    #     Display the output of multi-person-tracking
+    #     :param video (ndarray): input video tensor of shape NxHxWxC
+    #     :param trackers (ndarray): tracklets of shape Nx5 [x1,y1,x2,y2,track_id]
+    #     :return: None
+    #     '''
+    #     print('Displaying results..')
+    #
+    #     save = True if output_file else False
+    #     tmp_write_folder = osp.join('/tmp', f'{osp.basename(image_folder)}_mpt_results')
+    #     os.makedirs(tmp_write_folder, exist_ok=True)
+    #
+    #     colours = np.random.rand(32, 3)
+    #     image_file_names = sorted([
+    #         osp.join(image_folder, x)
+    #         for x in os.listdir(image_folder)
+    #         if x.endswith('.png') or x.endswith('.jpg')
+    #     ])
+    #
+    #     for idx, (img_fname, tracker) in enumerate(zip(image_file_names, trackers)):
+    #
+    #         img = cv2.imread(img_fname)
+    #         for d in tracker:
+    #             d = d.astype(np.int32)
+    #             c = (colours[d[4] % 32, :] * 255).astype(np.uint8).tolist()
+    #             cv2.rectangle(
+    #                 img, (d[0], d[1]), (d[2], d[3]),
+    #                 color=c, thickness=int(round(img.shape[0] / 256))
+    #             )
+    #             cv2.putText(img, f'{d[4]}', (d[0] - 9, d[1] - 9), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0))
+    #             cv2.putText(img, f'{d[4]}', (d[0] - 8, d[1] - 8), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255))
+    #
+    #         cv2.imshow('result video', img)
+    #
+    #         # time.sleep(0.03)
+    #         if cv2.waitKey(1) & 0xFF == ord('q'):
+    #             break
+    #
+    #         if save:
+    #             cv2.imwrite(osp.join(tmp_write_folder, f'{idx:06d}.png'), img)
+    #
+    #     cv2.destroyAllWindows()
+    #
+    #     if save:
+    #         print(f'Saving output video to {output_file}')
+    #         images_to_video(img_folder=tmp_write_folder, output_vid_file=output_file)
+    #         shutil.rmtree(tmp_write_folder)
 
-        save = True if output_file else False
-        tmp_write_folder = osp.join('/tmp', f'{osp.basename(image_folder)}_mpt_results')
-        os.makedirs(tmp_write_folder, exist_ok=True)
+    # def display_detection_results(self, image_folder, detections, output_file=None):
+    #     '''
+    #             Display the output of detector
+    #             :param video (ndarray): input video tensor of shape NxHxWxC
+    #             :param detections (ndarray): detections of shape Nx4 [x1,y1,x2,y2,track_id]
+    #             :return: None
+    #             '''
+    #     print('Displaying results..')
+    #
+    #     save = True if output_file else False
+    #     tmp_write_folder = osp.join('/tmp', f'{osp.basename(image_folder)}_mpt_results')
+    #     os.makedirs(tmp_write_folder, exist_ok=True)
+    #
+    #     colours = np.random.rand(32, 3)
+    #     image_file_names = sorted([
+    #         osp.join(image_folder, x)
+    #         for x in os.listdir(image_folder)
+    #         if x.endswith('.png') or x.endswith('.jpg')
+    #     ])
+    #
+    #     for idx, (img_fname, dets) in enumerate(zip(image_file_names, detections)):
+    #         print(img_fname)
+    #         img = cv2.imread(img_fname)
+    #         for d in dets:
+    #             d = d.astype(np.int32)
+    #             c = (0, 255, 0)
+    #             cv2.rectangle(
+    #                 img, (d[0], d[1]), (d[2], d[3]),
+    #                 color=c, thickness=int(round(img.shape[0] / 256))
+    #             )
+    #
+    #         cv2.imshow('result image', img)
+    #         # cv2.waitKey(0)
+    #         # cv2.destroyAllWindows()
+    #
+    #         if cv2.waitKey(1) & 0xFF == ord('q'):
+    #             break
+    #
+    #         if save:
+    #             cv2.imwrite(osp.join(tmp_write_folder, f'{idx:06d}.png'), img)
+    #
+    #     cv2.destroyAllWindows()
 
-        colours = np.random.rand(32, 3)
-        image_file_names = sorted([
-            osp.join(image_folder, x)
-            for x in os.listdir(image_folder)
-            if x.endswith('.png') or x.endswith('.jpg')
-        ])
+        # if save:
+        #     print(f'Saving output video to {output_file}')
+        #     images_to_video(img_folder=tmp_write_folder, output_vid_file=output_file)
+        #     shutil.rmtree(tmp_write_folder)
 
-        for idx, (img_fname, tracker) in enumerate(zip(image_file_names, trackers)):
-
-            img = cv2.imread(img_fname)
-            for d in tracker:
-                d = d.astype(np.int32)
-                c = (colours[d[4] % 32, :] * 255).astype(np.uint8).tolist()
-                cv2.rectangle(
-                    img, (d[0], d[1]), (d[2], d[3]),
-                    color=c, thickness=int(round(img.shape[0] / 256))
-                )
-                cv2.putText(img, f'{d[4]}', (d[0] - 9, d[1] - 9), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0))
-                cv2.putText(img, f'{d[4]}', (d[0] - 8, d[1] - 8), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255))
-
-            cv2.imshow('result video', img)
-
-            # time.sleep(0.03)
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
-
-            if save:
-                cv2.imwrite(osp.join(tmp_write_folder, f'{idx:06d}.png'), img)
-
-        cv2.destroyAllWindows()
-
-        if save:
-            print(f'Saving output video to {output_file}')
-            images_to_video(img_folder=tmp_write_folder, output_vid_file=output_file)
-            shutil.rmtree(tmp_write_folder)
-
-    def display_detection_results(self, image_folder, detections, output_file=None):
-        '''
-                Display the output of detector
-                :param video (ndarray): input video tensor of shape NxHxWxC
-                :param detections (ndarray): detections of shape Nx4 [x1,y1,x2,y2,track_id]
-                :return: None
-                '''
-        print('Displaying results..')
-
-        save = True if output_file else False
-        tmp_write_folder = osp.join('/tmp', f'{osp.basename(image_folder)}_mpt_results')
-        os.makedirs(tmp_write_folder, exist_ok=True)
-
-        colours = np.random.rand(32, 3)
-        image_file_names = sorted([
-            osp.join(image_folder, x)
-            for x in os.listdir(image_folder)
-            if x.endswith('.png') or x.endswith('.jpg')
-        ])
-
-        for idx, (img_fname, dets) in enumerate(zip(image_file_names, detections)):
-            print(img_fname)
-            img = cv2.imread(img_fname)
-            for d in dets:
-                d = d.astype(np.int32)
-                c = (0, 255, 0)
-                cv2.rectangle(
-                    img, (d[0], d[1]), (d[2], d[3]),
-                    color=c, thickness=int(round(img.shape[0] / 256))
-                )
-
-            cv2.imshow('result image', img)
-            # cv2.waitKey(0)
-            # cv2.destroyAllWindows()
-
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
-
-            if save:
-                cv2.imwrite(osp.join(tmp_write_folder, f'{idx:06d}.png'), img)
-
-        cv2.destroyAllWindows()
-
-        if save:
-            print(f'Saving output video to {output_file}')
-            images_to_video(img_folder=tmp_write_folder, output_vid_file=output_file)
-            shutil.rmtree(tmp_write_folder)
-
-    def __call__(self, image_folder, output_file=None):
+    def __call__(self, video_path, output_file=None):
         '''
         Execute MPT and return results as a dictionary of person instances
 
@@ -277,13 +277,11 @@ class MPT():
         :return: a dictionary of person instances
         '''
 
-        image_dataset = ImageFolder(image_folder)
+        video_dataset = VideoFile(video_path)
 
-        dataloader = DataLoader(image_dataset, batch_size=self.batch_size, num_workers=0)
+        dataloader = DataLoader(video_dataset, batch_size=self.batch_size, num_workers=0)
 
         trackers = self.run_tracker(dataloader)
-        if self.display:
-            self.display_results(image_folder, trackers, output_file)
 
         if self.output_format == 'dict':
             result = self.prepare_output_tracks(trackers)
