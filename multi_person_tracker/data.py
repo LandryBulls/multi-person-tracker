@@ -41,6 +41,14 @@ def images_to_video(img_folder, output_vid_file):
     subprocess.call(command)
 
 
+def frame2array(frame_no, video_opened):
+    # returns a video from as a numpy array in uint8
+    video_opened.set(cv2.CAP_PROP_POS_FRAMES,frame_no)
+    ret, frame = video_opened.read()
+    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    #cv2.destroyAllWindows()
+    return frame
+
 class ImageFolder(Dataset):
     def __init__(self, image_folder):
         self.image_file_names = [
@@ -55,4 +63,15 @@ class ImageFolder(Dataset):
 
     def __getitem__(self, idx):
         img = cv2.cvtColor(cv2.imread(self.image_file_names[idx]), cv2.COLOR_BGR2RGB)
+        return to_tensor(img)
+
+class VideoFile(Dataset):
+    def __init__(self, video_path):
+        self.video_cv2 = cv2.VideoCapture(video_path)
+
+    def __len__(self):
+        return int(self.video_cv2.get(cv2.CAP_PROP_FRAME_COUNT))
+
+    def __getitem__(self, idx):
+        img = frame2array(idx, self.video_cv2)
         return to_tensor(img)

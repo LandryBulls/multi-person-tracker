@@ -11,14 +11,14 @@ from torchvision.models.detection import keypointrcnn_resnet50_fpn
 from yolov3.yolo import YOLOv3
 
 from multi_person_tracker import Sort
-from multi_person_tracker.data import ImageFolder, images_to_video
+from multi_person_tracker.data import VideoFile
 
 class MPT():
     def __init__(
             self,
             device=None,
             batch_size=12,
-            display=False,
+            #display=False,
             detection_threshold=0.7,
             detector_type='yolo',
             yolo_img_size=608,
@@ -42,7 +42,7 @@ class MPT():
             self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
         self.batch_size = batch_size
-        self.display = display
+        #self.display = display
         self.detection_threshold = detection_threshold
         self.output_format = output_format
 
@@ -292,13 +292,13 @@ class MPT():
 
         return result
 
-    def detect(self, image_folder, output_file=None):
-        image_dataset = ImageFolder(image_folder)
+    def detect(self, video_path, output_file=None):
+        video_dataset = VideoFile(video_path)
 
-        dataloader = DataLoader(image_dataset, batch_size=self.batch_size, num_workers=0)
+        dataloader = DataLoader(video_dataset, batch_size=self.batch_size, num_workers=0)
 
         detections = self.run_detector(dataloader)
-        if self.display:
-            self.display_detection_results(image_folder, detections, output_file)
+        # if self.display:
+        #     self.display_detection_results(image_folder, detections, output_file)
         detections = self.prepare_output_detections(detections)
         return detections
